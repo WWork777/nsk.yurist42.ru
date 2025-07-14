@@ -7,6 +7,7 @@ import HomePractice from "@/components/home-components/home-practice/home-practi
 import HomeProblems from "@/components/home-components/home-problems/home-problems";
 import HomeTeam from "@/components/home-components/home-team/home-team";
 import PurposeHome from "@/components/home-components/purpose-home/purpose-home";
+import Quiz from "@/components/common/quiz/quiz";
 
 export const metadata = {
   title: "Юрист Новосибирск | Юридическая компания Кодексъ",
@@ -46,6 +47,7 @@ export default function Home() {
         buttonText="Бесплатная консультация"
         backgroundImageLink={"/common/hero-background.webp"}
       />
+      <Quiz />
       <HomeHelp
         helpTitle="Помогаем юридическим <br> и физическим лицам"
         helpTitleLeftBlock="ГРАЖДАНАМ"

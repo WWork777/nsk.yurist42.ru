@@ -8,7 +8,7 @@ import Etaps from "@/components/service-detail-page-components/etaps/eteps";
 import ConsultationForm from "@/components/common/consultation-form/comsultation-form";
 import YandexMap from "@/components/common/map/map";
 import BreadCrumble from "@/components/common/breadCrumble/breadCrumble";
-
+import Quiz from "@/components/common/quiz/quiz";
 
 export async function generateMetadata({ params }) {
   const allItems = [...servicesGrData, ...servicesBzData];
@@ -19,14 +19,16 @@ export async function generateMetadata({ params }) {
   if (!service) return {};
 
   return {
-    title: service.title || `${service.text} | Юридические услуги в Новосибирске`,
+    title:
+      service.title || `${service.text} | Юридические услуги в Новосибирске`,
     description: service.descriptionSeo || service.description,
     keywords: service.keywordsSeo || "",
     alternates: {
-      canonical: `https://nsk.yurist42.ru/services/${params.slug}`
+      canonical: `https://nsk.yurist42.ru/services/${params.slug}`,
     },
     openGraph: {
-      title: service.title || `${service.text} | Юридические услуги в Новосибирске`,
+      title:
+        service.title || `${service.text} | Юридические услуги в Новосибирске`,
       description: service.descriptionSeo || service.description,
       url: `https://nsk.yurist42.ru/services/${params.slug}`,
       images: [
@@ -82,10 +84,8 @@ export default function ServicePage({ params }) {
         buttonText="Бесплатная консультация"
         backgroundImageLink={"/common/hero-background2.webp"}
       />
-      <WeCan 
-        weCanTitle="Мы поможем" 
-        helpBlocks={helpBlocks} 
-      />
+      <WeCan weCanTitle="Мы поможем" helpBlocks={helpBlocks} />
+      <Quiz />
       <HomePractice practiceTitle="Юридическая практика <br> с 1997 года" />
       <Etaps
         etapsTitle="Этапы нашей <br> с вами работы"
