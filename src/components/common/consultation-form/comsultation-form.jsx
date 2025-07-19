@@ -39,7 +39,6 @@ export default function ConsultationForm({
     let valid = true;
     const newErrors = { name: "", phone: "" };
 
-
     if (!formData.phone.trim()) {
       newErrors.phone = "Пожалуйста, введите ваш телефон";
       valid = false;
@@ -55,20 +54,23 @@ export default function ConsultationForm({
   const sendToTelegram = async (data) => {
     const TELEGRAM_BOT_TOKEN = "7933033563:AAGeVEYEzAQ6NUuVYkxNsXgANSi0xvRN4sg";
     const TELEGRAM_CHAT_ID = "-1002630836547";
-    
-    const text = `Новая заявка с сайта (Новосибирск):\n\nИмя: ${data.name || 'не указано'}\nТелефон: ${data.phone}\nСообщение: ${data.message || 'не указано'}`;
+
+    const text = `Новая заявка с сайта (Новосибирск):\n\nИмя: ${data.name || "не указано"}\nТелефон: ${data.phone}\nСообщение: ${data.message || "не указано"}`;
 
     try {
-      const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          chat_id: TELEGRAM_CHAT_ID,
-          text: text,
-        }),
-      });
+      const response = await fetch(
+        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: text,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Ошибка при отправке сообщения");
@@ -82,34 +84,34 @@ export default function ConsultationForm({
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!validate()) return;
+    if (!validate()) return;
 
-  setIsLoading(true);
+    setIsLoading(true);
 
-  try {
-    const isSent = await sendToTelegram(formData);
+    try {
+      const isSent = await sendToTelegram(formData);
 
-    if (isSent) {
-      if (typeof window !== 'undefined' && window.ym) {
-        window.ym(91831377, 'reachGoal', 'Form');
+      if (isSent) {
+        if (typeof window !== "undefined" && window.ym) {
+          window.ym(91831377, "reachGoal", "Form");
+        }
+
+        alert(
+          "Форма успешно отправлена! Мы свяжемся с вами в ближайшее время."
+        );
+        setFormData({ name: "", phone: "", message: "" });
+      } else {
+        alert("Произошла ошибка при отправке. Пожалуйста, попробуйте позже.");
       }
-      
-      alert(
-        "Форма успешно отправлена! Мы свяжемся с вами в ближайшее время."
-      );
-      setFormData({ name: "", phone: "", message: "" });
-    } else {
-      alert("Произошла ошибка при отправке. Пожалуйста, попробуйте позже.");
+    } catch (error) {
+      console.error("Ошибка:", error);
+      alert("Произошла ошибка. Пожалуйста, попробуйте еще раз.");
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error) {
-    console.error("Ошибка:", error);
-    alert("Произошла ошибка. Пожалуйста, попробуйте еще раз.");
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
   return (
     <section className="section-second" id="form">
