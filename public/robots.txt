@@ -7,3 +7,5 @@ Host: https://nsk.yurist42.ru/
 
 # Sitemaps
 Sitemap: https://nsk.yurist42.ru/sitemap.xml
+
+Clean-param: etext /
