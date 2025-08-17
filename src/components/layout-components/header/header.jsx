@@ -26,10 +26,12 @@ export default function Header() {
     pathname === "/services" ||
     pathname === "/price" ||
     pathname === "/practices" ||
+    pathname === "/news" ||
     pathname === "/contacts" ||
     pathname === "/fiz" ||
     pathname === "/yur" ||
     pathname === "/privacy" ||
+    pathname.startsWith("/news/") ||
     pathname.startsWith("/practices/");
 
   const toggleMenu = () => setMenuOpen(!isMenuOpen);
@@ -100,6 +102,13 @@ export default function Header() {
               Практика
             </p>
           </Link>
+          <Link href="/news" onClick={closeMenu}>
+            <p
+              className={isDarkPage && isScrolled ? styles.darkTextMobile : ""}
+            >
+              Новости
+            </p>
+          </Link>
           <Link href="/contacts" onClick={closeMenu}>
             <p
               className={isDarkPage && isScrolled ? styles.darkTextMobile : ""}
@@ -145,6 +154,9 @@ export default function Header() {
         </Link>
         <Link href="/practices">
           <p className={isDarkPage ? styles.darkText : ""}>Практика</p>
+        </Link>
+        <Link href="/news">
+          <p className={isDarkPage ? styles.darkText : ""}>Новости</p>
         </Link>
         <Link href="/contacts">
           <p className={isDarkPage ? styles.darkText : ""}>Контакты</p>
