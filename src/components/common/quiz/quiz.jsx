@@ -13,6 +13,7 @@ export default function Quiz() {
     name: "",
     phone: "",
   });
+  const [isAgreed, setIsAgreed] = useState(false); // Согласие
   const [isSending, setIsSending] = useState(false);
   const [answers, setAnswers] = useState({
     userType: null,
@@ -32,7 +33,7 @@ export default function Quiz() {
     setIsSending(true);
     try {
       const message = `
-        <b>Новая заявка с квиза (Новосибирск)</b>\n
+        <b>Новая заявка с квиза (Новосбирск)</b>\n
         <b>Тип клиента:</b> ${answers.userType === "individual" ? "Физическое лицо" : "Юридическое лицо"}\n
         <b>Тема вопроса:</b> ${answers.topic || "Не указано"}\n
         <b>Комментарий:</b> ${answers.comment || "Не указано"}\n
@@ -41,7 +42,7 @@ export default function Quiz() {
       `;
 
       const response = await fetch(
-        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, // ✅ Убран пробел
         {
           method: "POST",
           headers: {
@@ -86,7 +87,6 @@ export default function Quiz() {
   const handleNextClick = () => {
     if (selectedOption || step === 3) {
       setStep(step + 1);
-      // Не сбрасываем selectedOption если переходим на шаг комментария
       if (step !== 2) {
         setSelectedOption(null);
       }
@@ -111,30 +111,31 @@ export default function Quiz() {
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
-
     let processedValue = value;
 
     if (name === "phone") {
-      // Удаляем все, кроме цифр
       processedValue = value.replace(/[^\d]/g, "");
     } else {
-      // Удаляем пробелы для имени
       processedValue = value.replace(/\s/g, "");
     }
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: processedValue,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: processedValue }));
     setAnswers((prev) => ({ ...prev, [name]: processedValue }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!isAgreed) {
+      alert(
+        "Пожалуйста, подтвердите согласие с политикой обработки персональных данных."
+      );
+      return;
+    }
+
     if (!answers.topic) {
       alert("Пожалуйста, выберите тему вопроса");
-      setStep(2); // Возвращаем на шаг выбора темы
+      setStep(2);
       return;
     }
 
@@ -142,17 +143,17 @@ export default function Quiz() {
 
     if (isSent) {
       if (typeof window !== "undefined" && window.ym) {
-        window.ym(91831377, "reachGoal", "Quiz");
+        window.ym(56680159, "reachGoal", "Quiz");
       }
       alert(
         "Спасибо! Ваша заявка отправлена. Мы свяжемся с вами в ближайшее время."
       );
-      // Сброс формы
       setStep(0);
       setFormData({ name: "", phone: "" });
       setComment("");
       setSelectedOption(null);
       setUserType(null);
+      setIsAgreed(false);
       setAnswers({
         userType: null,
         topic: null,
@@ -254,7 +255,6 @@ export default function Quiz() {
 
   const getTotalSteps = () => {
     if (!userType) return 2;
-
     return (
       2 +
       (userType === "individual"
@@ -308,11 +308,31 @@ export default function Quiz() {
                       required
                     />
                   </div>
+
+                  {/* Чекбокс в одну строку */}
+                  <div className={styles.agreement_checkbox}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={isAgreed}
+                        onChange={(e) => setIsAgreed(e.target.checked)}
+                        style={{ margin: 0 }}
+                      />
+                      Я согласен с{" "}
+                      <Link
+                        href="/privacy"
+                        style={{ color: "#A47764", whiteSpace: "nowrap" }}
+                      >
+                        политикой обработки персональных данных
+                      </Link>
+                    </label>
+                  </div>
+
                   <div className={styles.quiz_form_buttons}>
                     <button
                       type="submit"
                       className={styles.button_next}
-                      disabled={isSending}
+                      disabled={isSending || !isAgreed}
                     >
                       {isSending ? "Отправка..." : currentStep.buttonText}
                     </button>

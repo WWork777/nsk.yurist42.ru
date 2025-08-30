@@ -18,6 +18,7 @@ export default function ConsultationForm({
     phone: "",
   });
 
+  const [isAgreed, setIsAgreed] = useState(false); // Состояние для чекбокса
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -35,7 +36,6 @@ export default function ConsultationForm({
     }
   };
 
-  // Функция для разрешения только цифр и знака "+"
   const handlePhoneInput = (e) => {
     const { value, name } = e.target;
 
@@ -47,7 +47,6 @@ export default function ConsultationForm({
       [name]: sanitizedValue,
     }));
 
-    // Очищаем ошибку, если поле не пустое
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -76,11 +75,11 @@ export default function ConsultationForm({
     const TELEGRAM_BOT_TOKEN = "7933033563:AAGeVEYEzAQ6NUuVYkxNsXgANSi0xvRN4sg";
     const TELEGRAM_CHAT_ID = "-1002630836547";
 
-    const text = `Новая заявка с сайта (Новосибирск):\n\nИмя: ${data.name || "не указано"}\nТелефон: ${data.phone}\nСообщение: ${data.message || "не указано"}`;
+    const text = `Новая заявка с сайта (Кемерово):\n\nИмя: ${data.name}\nТелефон: ${data.phone}\nСообщение: ${data.message || "не указано"}`;
 
     try {
       const response = await fetch(
-        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, // Убрал лишний пробел
         {
           method: "POST",
           headers: {
@@ -107,6 +106,13 @@ export default function ConsultationForm({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!isAgreed) {
+      alert(
+        "Пожалуйста, подтвердите согласие с политикой обработки персональных данных."
+      );
+      return;
+    }
+
     if (!validate()) return;
 
     setIsLoading(true);
@@ -116,13 +122,14 @@ export default function ConsultationForm({
 
       if (isSent) {
         if (typeof window !== "undefined" && window.ym) {
-          window.ym(91831377, "reachGoal", "Form");
+          window.ym(56680159, "reachGoal", "Form");
         }
 
         alert(
           "Форма успешно отправлена! Мы свяжемся с вами в ближайшее время."
         );
         setFormData({ name: "", phone: "", message: "" });
+        setIsAgreed(false); // сброс чекбокса после отправки (по желанию)
       } else {
         alert("Произошла ошибка при отправке. Пожалуйста, попробуйте позже.");
       }
@@ -177,17 +184,30 @@ export default function ConsultationForm({
               onChange={handleChange}
             />
           </div>
-          <button type="submit" disabled={isLoading || !formData.phone.trim()}>
+
+          {/* Чекбокс согласия */}
+          <div className={styles.agreement_checkbox}>
+            <label>
+              <input
+                type="checkbox"
+                checked={isAgreed}
+                onChange={(e) => setIsAgreed(e.target.checked)}
+              />
+              Я согласен с{" "}
+              <Link href="/privacy" style={{ color: "#A47764" }}>
+                политикой обработки персональных данных
+              </Link>
+            </label>
+          </div>
+
+          {/* Кнопка активна только если чекбокс отмечен и телефон введён */}
+          <button
+            type="submit"
+            disabled={isLoading || !formData.phone.trim() || !isAgreed}
+          >
             <p>{isLoading ? "Отправка..." : "Отправить заявку"}</p>
           </button>
         </form>
-        <h5>
-          Нажимая кнопку «Отправить заявку», вы автоматически соглашаетесь на
-          обработку{" "}
-          <Link href={"/privacy"} style={{ color: "#A47764" }}>
-            личных данных
-          </Link>
-        </h5>
       </div>
     </section>
   );

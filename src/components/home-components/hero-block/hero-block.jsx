@@ -3,6 +3,7 @@ import styles from "./hero-block.module.scss";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Modal from "@/components/common/modal/modal";
+
 export default function HeroBlock({
   heroTitle,
   heroText,
@@ -21,6 +22,8 @@ export default function HeroBlock({
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
+
+  // Анимация чисел
   useEffect(() => {
     const animateNumbers = () => {
       const observer = new IntersectionObserver(
@@ -47,6 +50,10 @@ export default function HeroBlock({
       );
 
       numberRefs.current.forEach((ref) => ref && observer.observe(ref));
+
+      return () => {
+        numberRefs.current.forEach((ref) => ref && observer.unobserve(ref));
+      };
     };
 
     const animateValue = (element, start, end, duration, suffix = "") => {
@@ -64,11 +71,9 @@ export default function HeroBlock({
     };
 
     animateNumbers();
-    return () => {
-      numberRefs.current = [];
-    };
   }, []);
 
+  // Форма
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -80,6 +85,7 @@ export default function HeroBlock({
     phone: "",
   });
 
+  const [isAgreed, setIsAgreed] = useState(false); // Согласие с политикой
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -97,19 +103,14 @@ export default function HeroBlock({
     }
   };
 
-  // Функция для разрешения только цифр и знака "+"
   const handlePhoneInput = (e) => {
     const { value, name } = e.target;
-
-    // Разрешаем только цифры и знак "+"
     const sanitizedValue = value.replace(/[^0-9+]/g, "");
-
     setFormData((prev) => ({
       ...prev,
       [name]: sanitizedValue,
     }));
 
-    // Очищаем ошибку, если поле не пустое
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -142,7 +143,7 @@ export default function HeroBlock({
 
     try {
       const response = await fetch(
-        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, // ✅ Убран пробел
         {
           method: "POST",
           headers: {
@@ -150,7 +151,7 @@ export default function HeroBlock({
           },
           body: JSON.stringify({
             chat_id: TELEGRAM_CHAT_ID,
-            text: text,
+            text,
           }),
         }
       );
@@ -169,6 +170,13 @@ export default function HeroBlock({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!isAgreed) {
+      alert(
+        "Пожалуйста, подтвердите согласие с политикой обработки персональных данных."
+      );
+      return;
+    }
+
     if (!validate()) return;
 
     setIsLoading(true);
@@ -177,15 +185,15 @@ export default function HeroBlock({
       const isSent = await sendToTelegram(formData);
 
       if (isSent) {
-        // Отправка цели в Яндекс.Метрику
         if (typeof window !== "undefined" && window.ym) {
-          window.ym(91831377, "reachGoal", "HeroForm");
+          window.ym(56680159, "reachGoal", "HeroForm");
         }
 
         alert(
           "Форма успешно отправлена! Мы свяжемся с вами в ближайшее время."
         );
         setFormData({ name: "", phone: "", message: "" });
+        setIsAgreed(false); // сброс чекбокса после отправки (по желанию)
       } else {
         alert("Произошла ошибка при отправке. Пожалуйста, попробуйте позже.");
       }
@@ -218,8 +226,10 @@ export default function HeroBlock({
               dangerouslySetInnerHTML={{ __html: heroTextMobile }}
             ></p>
           </div>
+
           <form className={styles.hero_content_right} onSubmit={handleSubmit}>
             <h4 className={styles.consultation_form_title}>Оставьте заявку</h4>
+
             <div className={styles.consultation_form_top_inputs}>
               <div className={styles.input_wrapper}>
                 <input
@@ -248,6 +258,7 @@ export default function HeroBlock({
                 )}
               </div>
             </div>
+
             <div className={styles.consultation_form_bottom_inputs}>
               <input
                 type="text"
@@ -257,9 +268,26 @@ export default function HeroBlock({
                 onChange={handleChange}
               />
             </div>
+
+            {/* Чекбокс согласия */}
+            <div className={styles.agreement_checkbox}>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={isAgreed}
+                  onChange={(e) => setIsAgreed(e.target.checked)}
+                />
+                Я согласен с{" "}
+                <Link href="/privacy" style={{ color: "#A47764" }}>
+                  политикой обработки персональных данных
+                </Link>
+              </label>
+            </div>
+
+            {/* Кнопка: активна только при заполнении телефона и согласии */}
             <button
               type="submit"
-              disabled={isLoading || !formData.phone.trim()}
+              disabled={isLoading || !formData.phone.trim() || !isAgreed}
             >
               <p>{isLoading ? "Отправка..." : "Обращение к юристу"}</p>
             </button>
@@ -305,6 +333,7 @@ export default function HeroBlock({
           </div>
         </div>
       </div>
+
       {isModalOpen && <Modal isOpen={isModalOpen} onClose={toggleModal} />}
     </div>
   );
