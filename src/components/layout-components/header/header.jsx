@@ -127,21 +127,36 @@ export default function Header() {
           </Link>
         </div>
         <div className={styles.header_contacts_bottom_mobile}>
+        {/* Первый ряд */}
+        <div className={styles.messenger_row}>
           <Link
             href="https://api.whatsapp.com/send/?phone=79609309191"
-            className={`${styles.header_contacts_link_mobile} `}
+            className={styles.header_contacts_link_mobile}
           >
             <img src={"/svg/mobileheader/wa.svg"} alt="WhatsApp" />
             <h5>Whatsapp</h5>
           </Link>
+
           <Link
             href="https://telegram.me/yurist42_kodeks"
-            className={`${styles.header_contacts_link_mobile}`}
+            className={styles.header_contacts_link_mobile}
           >
             <img src={"/svg/mobileheader/tg.svg"} alt="Telegram" />
             <h5>Telegram</h5>
           </Link>
         </div>
+
+        {/* Второй ряд */}
+        <div className={styles.messenger_row_center}>
+          <Link
+            href="https://max.ru/u/f9LHodD0cOKU3qvldFKHsXB1Hs0cS8Ve_tQtUFZ5F6BOwi4vntNqXHG2MiA"
+            className={styles.header_contacts_link_mobile}
+          >
+            <img src={"/svg/mobileheader/max.svg"} alt="Max" />
+            <h5>Max</h5>
+          </Link>
+        </div>
+      </div>
       </div>
 
       {/* Десктоп навигация */}
@@ -204,6 +219,22 @@ export default function Header() {
               alt="Telegram"
             />
             <h5>Telegram</h5>
+          </Link>
+          <Link
+            href="https://max.ru/u/f9LHodD0cOKU3qvldFKHsXB1Hs0cS8Ve_tQtUFZ5F6BOwi4vntNqXHG2MiA"
+            className={`${styles.header_contacts_link} ${
+              isDarkPage ? styles.dark_contacts_link : ""
+            }`}
+          >
+            <img
+              src={
+                isDarkPage & !isScrolled
+                  ? "/svg/header/maxDark.svg"
+                  : "/svg/header/max.svg"
+              }
+              alt="Telegram"
+            />
+            <h5>Max</h5>
           </Link>
         </div>
       </div>
