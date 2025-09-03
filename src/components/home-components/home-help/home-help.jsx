@@ -38,9 +38,9 @@ const LiSvgLeft = () => {
           <SvgLeft liText="Финансовое право" link="category/finansy" />
           <SvgLeft liText="Автоюрист" link="category/avtoyurist" />
           <SvgLeft liText="Земельное право" link="category/zemelnoe-pravo" />
+          <SvgLeft liText="Наследство" link="category/nasledstvo" />
         </div>
         <div className={styles.li_right}>
-          <SvgLeft liText="Наследство" link="category/nasledstvo" />
           <SvgLeft liText="Жилищное право" link="category/zhilishnoe-pravo" />
           <SvgLeft
             liText="Защита прав потребителей"
@@ -80,6 +80,7 @@ const LiSvgRight = () => {
             <img src="/svg/home-help/li2.svg" alt="list icon" />
             <p style={{ margin: 0 }}>Аутсорс</p>
           </Link>
+          <SvgRight liText="Интеллектуальные споры" link="intellektualnye-spory" />
         </div>
         <div className={styles.li_right}>
           <SvgRight
@@ -101,7 +102,7 @@ const LiSvgRight = () => {
           />
           <SvgRight
             liText="Оспаривание сделок в банкротстве"
-            link="vzyskanie-cherez-bankrotstvo"
+            link="osporivanie-sdelok-v-bankrotstve"
           />
         </div>
       </div>
