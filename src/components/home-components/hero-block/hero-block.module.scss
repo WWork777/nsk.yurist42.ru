@@ -88,7 +88,9 @@
       color: white;
     }
 
-    input {
+    input,
+    .hero_phone_input {
+      height: 52px !important;
       width: 100%;
       padding: 1rem;
       background: rgba(255, 255, 255, 0.1);
@@ -171,6 +173,33 @@
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
+  }
+}
+
+.agreement_checkbox {
+  label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    @media (max-width: 768px) {
+      font-size: 12px;
+    }
+    @media (max-width: 480px) {
+      font-size: 10px;
+      gap: 4px;
+    }
+
+    @media (max-width: 400px) {
+      font-size: 8px;
+      gap: 2px;
+    }
+  }
+
+  input[type="checkbox"] {
+    margin: 0;
+    width: 16px;
+    height: 16px;
   }
 }
 
@@ -474,32 +503,5 @@
     flex-direction: column;
     margin-top: 0;
     gap: 3rem;
-  }
-}
-
-.agreement_checkbox {
-  label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    @media (max-width: 768px) {
-      font-size: 12px;
-    }
-    @media (max-width: 480px) {
-      font-size: 10px;
-      gap: 4px;
-    }
-
-    @media (max-width: 400px) {
-      font-size: 8px;
-      gap: 2px;
-    }
-  }
-
-  input[type="checkbox"] {
-    margin: 0;
-    width: 16px;
-    height: 16px;
   }
 }
