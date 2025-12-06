@@ -45,6 +45,7 @@ export default function RootLayout({ children }) {
           src="https://cdn.botfaqtor.ru/one.js"
           strategy="afterInteractive"
         />
+        <meta name="yandex-verification" content="53b108ef91e46109" />
       </head>
       <body className={`${montserrat.variable}`}>
         <Header />
