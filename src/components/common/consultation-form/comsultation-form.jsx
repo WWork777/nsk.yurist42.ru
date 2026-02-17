@@ -176,7 +176,7 @@ export default function ConsultationForm({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          chat_id: "-4209280426",
+          chat_id: "-1002630836547",
           text: text,
           parse_mode: "Markdown",
         }),
