@@ -152,6 +152,23 @@ export default function ConsultationForm({
 
     const text = `Новая заявка с сайта (Новосбирск):\n\nИмя: ${data.name}\nТелефон: ${formattedPhone}\nСообщение: ${data.message || "не указано"}`;
 
+    // MAX
+    const Phone = "79609309191";
+    const idInstance = "3100517801";
+    const apiTokenInstance =
+    "4e23b210658549c881680633b93bb11301a0f304a927433da6";
+    const maxResponse = await fetch(
+    `https://api.green-api.com/waInstance${idInstance}/SendMessage/${apiTokenInstance}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+      chatId: `-71184639158921`,
+      message: text,
+      }),
+    },
+    );
+
     try {
       const response = await fetch("/api/telegram-proxi", {
         method: "POST",
@@ -159,7 +176,7 @@ export default function ConsultationForm({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          chat_id: "-4209280426",
+          chat_id: "-1002630836547",
           text: text,
           parse_mode: "Markdown",
         }),
