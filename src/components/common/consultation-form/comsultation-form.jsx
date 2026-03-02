@@ -150,7 +150,7 @@ export default function ConsultationForm({
       ? data.phone
       : `+${data.phone}`;
 
-    const text = `Новая заявка с сайта (Кемерово):\n\nИмя: ${data.name}\nТелефон: ${formattedPhone}\nСообщение: ${data.message || "не указано"}`;
+    const text = `Новая заявка с сайта (Новосибирск):\n\nИмя: ${data.name}\nТелефон: ${formattedPhone}\nСообщение: ${data.message || "не указано"}`;
 
     // MAX
     const Phone = "79609309191";
