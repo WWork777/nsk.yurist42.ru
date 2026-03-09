@@ -18,7 +18,7 @@ export default function FooterSib() {
           alt="logo"
           className={styles.footer_logo_img}
         />
-        <h5>1997-2025 КОДЕКСЪ. Все права защищены.</h5>
+        <h5>1997-2026 КОДЕКСЪ. Все права защищены.</h5>
         <p>Политика конфиденциальности</p>
       </div>
       <div className={styles.footer_links}>
@@ -54,14 +54,16 @@ export default function FooterSib() {
           </Link>
         </div>
         <div className={styles.footer_bottom}>
-          <h5>1997-2025 КОДЕКСЪ. Все права защищены.</h5>
+          <h5>1997-2026 КОДЕКСЪ. Все права защищены.</h5>
           <p>Политика конфиденциальности</p>
         </div>
       </div>
 
       {/* Добавленная строка с копирайтом */}
       <div className={styles.footer_copyright}>
-        <a href="https://virlab42.ru">Сайт разработан компанией <span>Вирлаб</span></a>
+        <a href="https://virlab42.ru">
+          Сайт разработан компанией <span>Вирлаб</span>
+        </a>
       </div>
     </div>
   );
